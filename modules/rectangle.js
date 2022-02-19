@@ -1,4 +1,4 @@
-import Object, { OBJECT_TYPES } from "./object.js";
+import Object, { OBJECT_TYPES } from "./object";
 
 class Rectangle extends Object {
   /**
