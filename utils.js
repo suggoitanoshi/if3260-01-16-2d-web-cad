@@ -20,5 +20,7 @@ const Util = {
 
     console.error(gl.getProgramInfoLog(program));
     gl.deleteProgram(program);
-  }
+  },
+
+  randomClipSpace: () => Math.random()*2-1,
 };
