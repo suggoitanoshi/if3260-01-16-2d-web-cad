@@ -51,7 +51,7 @@ class Rectangle extends Object {
 
   /**
    * @param {WebGLRenderingContext} gl
-   * @param {number[]} uniformColor array of (r, g, b) or (r, g, b, a) values
+   * @param {WebGLUniformLocation} uniformColor array of (r, g, b) or (r, g, b, a) values
    */
   render(gl, uniformColor) {
     super.render(gl, gl.TRIANGLE_FAN, 4, uniformColor);

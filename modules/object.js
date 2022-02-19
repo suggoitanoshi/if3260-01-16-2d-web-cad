@@ -57,7 +57,7 @@ class Object {
    * @param {WebGLRenderingContext} gl
    * @param {number} type WebGL Type
    * @param {number} count
-   * @param {number} uniformColor location of vColor
+   * @param {WebGLUniformLocation} uniformColor location of vColor
    */
   render(gl, type, count, uniformColor) {
     gl.uniform4f(uniformColor, ...this.#color); // set color for fragment shader
