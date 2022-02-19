@@ -1,4 +1,4 @@
-const Util = {
+export const Util = {
   createShader: (gl, type, source) => {
     const shader = gl.createShader(type);
     gl.shaderSource(shader, source);
@@ -24,3 +24,5 @@ const Util = {
 
   randomClipSpace: () => Math.random()*2-1,
 };
+
+export default Util;

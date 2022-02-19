@@ -1,4 +1,5 @@
 import shapes from "./modules/shapes.js";
+import Util from "./utils.js";
 
 (() => {
   document.addEventListener('DOMContentLoaded', async (_e) => { // Needed, prevent lookup before DOM ready
@@ -37,7 +38,7 @@ import shapes from "./modules/shapes.js";
 
     const randomClipSpace = Util.randomClipSpace;
 
-    const rects = Array(5).fill().map(() => new Rectangle(randomClipSpace(), randomClipSpace(), [randomClipSpace(), randomClipSpace()], [Math.random(), Math.random(), Math.random(), 1]))
+    const rects = Array(5).fill().map(() => new shapes.Rectangle(randomClipSpace(), randomClipSpace(), [randomClipSpace(), randomClipSpace()], [Math.random(), Math.random(), Math.random(), 1]))
 
     const render = () => {
       gl.clear(gl.COLOR_BUFFER_BIT);
