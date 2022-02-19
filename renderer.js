@@ -1,4 +1,4 @@
-import Rectangle from "./modules/rectangle.js";
+import shapes from "./modules/shapes.js";
 
 (() => {
   document.addEventListener('DOMContentLoaded', async (_e) => { // Needed, prevent lookup before DOM ready
