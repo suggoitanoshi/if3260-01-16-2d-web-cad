@@ -83,7 +83,7 @@ import Util from "./utils.js";
       rects.push(
         new shapes.Square(
           320,
-          Util.scaleClick(ev, canvas),
+          Util.getCanvasCoordinate(ev, canvas),
           [randomClipSpace(), randomClipSpace(), randomClipSpace()],
           canvas
         )

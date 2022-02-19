@@ -55,7 +55,7 @@ const Util = {
    * @param {MouseEvent} ev
    * @param {HTMLCanvasElement} canvas
    */
-  scaleClick: (ev, canvas) => [
+  getCanvasCoordinate: (ev, canvas) => [
     -1 + Util.scaleWidth(ev.clientX - canvas.offsetLeft, canvas),
     1 - Util.scaleHeight(ev.clientY - canvas.offsetTop, canvas),
   ],
