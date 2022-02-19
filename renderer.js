@@ -1,5 +1,5 @@
-import shapes from "./modules/shapes";
-import Util from "./utils";
+import shapes from "./modules/shapes.js";
+import Util from "./utils.js";
 
 (() => {
   document.addEventListener("DOMContentLoaded", async (_e) => {

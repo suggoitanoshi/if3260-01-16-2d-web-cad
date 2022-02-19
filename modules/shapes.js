@@ -1,3 +1,3 @@
-import Rectangle from "./rectangle";
+import Rectangle from "./rectangle.js";
 
 export default { Rectangle };
