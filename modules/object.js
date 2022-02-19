@@ -39,16 +39,10 @@ class Object {
   }
 
   /**
-   * @param {number[]} vertices array of length 2
+   * @param {number[]} vertices array of even length
    */
   setPoints(vertices) {
-    if (vertices.length > 2) {
-      vertices = vertices.slice(0, 2);
-    } else {
-      while (vertices.length < 2) {
-        vertices = vertices.concat(0);
-      }
-    }
+    if (vertices.length % 2) vertices = vertices.concat(0);
     this.#vertices = vertices;
   }
 
