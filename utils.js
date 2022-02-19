@@ -36,6 +36,29 @@ const Util = {
   },
 
   randomClipSpace: () => Math.random() * 2 - 1,
+
+  /**
+   * @param {number} x
+   * @param {HTMLCanvasElement} canvas
+   */
+  scaleWidth: (x, canvas) => (x * 2) / canvas.clientWidth,
+
+  /**
+   *
+   * @param {number} y
+   * @param {HTMLCanvasElement} canvas
+   */
+  scaleHeight: (y, canvas) => (y * 2) / canvas.clientHeight,
+
+  /**
+   *
+   * @param {MouseEvent} ev
+   * @param {HTMLCanvasElement} canvas
+   */
+  scaleClick: (ev, canvas) => [
+    -1 + Util.scaleWidth(ev.clientX - canvas.offsetLeft, canvas),
+    1 - Util.scaleHeight(ev.clientY - canvas.offsetTop, canvas),
+  ],
 };
 
 export default Util;

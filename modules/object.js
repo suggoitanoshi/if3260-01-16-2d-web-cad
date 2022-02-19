@@ -12,11 +12,13 @@ class Object {
   #type; // see constants OBJCET_TYPES
 
   /**
+   * @public
    * @type {number[]} array of 2 elements
    */
   #vertices; // vertices, should be in clip space but debatable
 
   /**
+   * @public
    * @type {number[]} array of 4 elements
    */
   #color; // quadruple of color (r,g,b,a)
@@ -25,6 +27,13 @@ class Object {
    * @param {keyof typeof OBJECT_TYPES} type
    */
   constructor(type) {
+    this.setType(type);
+  }
+
+  /**
+   * @param {keyof typeof OBJECT_TYPES} type
+   */
+  setType(type) {
     this.#type = type;
   }
 

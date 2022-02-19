@@ -1,3 +1,4 @@
 import Rectangle from "./rectangle.js";
+import Square from "./square.js";
 
-export default { Rectangle };
+export default { Rectangle, Square };

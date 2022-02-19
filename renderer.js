@@ -56,22 +56,42 @@ import Util from "./utils.js";
 
     const randomClipSpace = Util.randomClipSpace;
 
-    const rects = Array(5)
+    const rects = Array(6)
       .fill()
-      .map(
-        () =>
-          new shapes.Rectangle(
-            randomClipSpace(),
-            randomClipSpace(),
-            [randomClipSpace(), randomClipSpace()],
-            [Math.random(), Math.random(), Math.random(), 1]
-          )
+      .map((_, i) =>
+        i % 2
+          ? new shapes.Rectangle(
+              randomClipSpace(),
+              randomClipSpace(),
+              [randomClipSpace(), randomClipSpace()],
+              [Math.random(), Math.random(), Math.random(), 1]
+            )
+          : new shapes.Square(
+              160,
+              [randomClipSpace(), randomClipSpace()],
+              [Math.random(), Math.random(), Math.random(), 1],
+              canvas
+            )
       );
 
     const render = () => {
       gl.clear(gl.COLOR_BUFFER_BIT);
       rects.forEach((v) => v.render(gl, vColor));
     };
+
+    canvas.addEventListener("click", (ev) => {
+      rects.push(
+        new shapes.Square(
+          320,
+          Util.scaleClick(ev, canvas),
+          [randomClipSpace(), randomClipSpace(), randomClipSpace()],
+          canvas
+        )
+      );
+
+      render();
+    });
+
     render();
   });
 })(); // IIFE
