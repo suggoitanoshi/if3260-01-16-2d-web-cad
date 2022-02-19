@@ -37,3 +37,5 @@ const Util = {
 
   randomClipSpace: () => Math.random() * 2 - 1,
 };
+
+export default Util;
