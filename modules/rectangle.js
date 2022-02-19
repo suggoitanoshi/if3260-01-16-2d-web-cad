@@ -36,15 +36,14 @@ class Rectangle extends Object {
 
     this.setColor(color);
 
-    this.setPoints([
-      ...bottomLeft,
-      bottomLeft[0] + width,
-      bottomLeft[1],
-      bottomLeft[0] + width,
-      bottomLeft[1] + height,
-      bottomLeft[0],
-      bottomLeft[1] + height,
-    ]);
+    this.setPoints(
+      [
+        bottomLeft,
+        [bottomLeft[0] + width, bottomLeft[1]],
+        [bottomLeft[0] + width, bottomLeft[1] + height],
+        [bottomLeft[0], bottomLeft[1] + height],
+      ].flat()
+    );
 
     this.#handle = [bottomLeft[0] + width, bottomLeft[1] + height];
   }
