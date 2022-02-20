@@ -4,7 +4,6 @@ import Util from "./utils.js";
 (() => {
   document.addEventListener("DOMContentLoaded", async (_e) => {
     var isDragging = false;
-    var isDown = false;
 
     // Needed, prevent lookup before DOM ready
     /**
@@ -85,30 +84,10 @@ import Util from "./utils.js";
       });
     };
 
-    canvas.addEventListener("mousedown", (ev) => {
+    document.addEventListener("mouseup", (ev) => {
       ev.preventDefault();
       ev.stopPropagation();
 
-      if (select.value === "Square") {
-        objects.push(
-          new shapes.Square(
-            [ev.clientX, ev.clientY],
-            [ev.clientX, ev.clientY],
-            [...Util.convertToRGB(color.value), 0.3],
-            canvas
-          )
-        );
-      }
-
-      isDown = true;
-      isDragging = true;
-    });
-
-    canvas.addEventListener("mouseup", (ev) => {
-      ev.preventDefault();
-      ev.stopPropagation();
-
-      isDown = false;
       isDragging = false;
 
       const drawnObject = objects[objects.length - 1];
@@ -118,18 +97,23 @@ import Util from "./utils.js";
       render();
     });
 
-    canvas.addEventListener("mouseenter", (ev) => {
+    canvas.addEventListener("mousedown", (ev) => {
       ev.preventDefault();
       ev.stopPropagation();
 
-      isDown = isDragging;
-    });
+      if (select.value === "Square") {
+        objects.push(
+          new shapes.Square(
+            [ev.clientX, ev.clientY],
+            [ev.clientX, ev.clientY],
+            [...Util.convertToRGB(color.value), 0.6],
+            canvas
+          )
+        );
+      }
 
-    canvas.addEventListener("mouseleave", (ev) => {
-      ev.preventDefault();
-      ev.stopPropagation();
-
-      isDown = false;
+      isDragging = true;
+      render();
     });
 
     canvas.addEventListener("mousemove", (ev) => {
