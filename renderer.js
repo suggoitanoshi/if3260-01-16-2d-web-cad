@@ -56,6 +56,9 @@ import Util from "./utils.js";
 
     const randomClipSpace = Util.randomClipSpace;
 
+    /* Depth test to avoid rendering overlapped shapes */
+    //gl.enable(gl.DEPTH_TEST);
+
     const rects = Array(6)
       .fill()
       .map((_, i) =>
@@ -79,15 +82,37 @@ import Util from "./utils.js";
       rects.forEach((v) => v.render(gl, vColor));
     };
 
+    const poly = document.getElementById("polygon");
+    const rectangle = document.getElementById("rectangle");
+    const square = document.getElementById("square");
+    function log(msg) {
+      console.log(msg);
+    }
+    let mode = 0;
+    poly.addEventListener("click", () => {
+      mode = 0;
+      log(mode);
+    });
+    rectangle.addEventListener("click", () => {
+      mode = 1;
+      log(mode);
+    });
+    square.addEventListener("click", () => {
+      mode = 2;
+      log(mode);
+    });
+
     canvas.addEventListener("click", (ev) => {
-      rects.push(
-        new shapes.Square(
-          320,
-          Util.getCanvasCoordinate(ev, canvas),
-          [randomClipSpace(), randomClipSpace(), randomClipSpace()],
-          canvas
-        )
-      );
+      if (mode == 2) {
+        rects.push(
+          new shapes.Square(
+            320,
+            Util.getCanvasCoordinate(ev, canvas),
+            [randomClipSpace(), randomClipSpace(), randomClipSpace()],
+            canvas
+          )
+        );
+      }
 
       render();
     });
