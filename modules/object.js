@@ -47,6 +47,10 @@ class Object {
     this.#color = color;
   }
 
+  getColor() {
+    return this.#color;
+  }
+
   /**
    * @param {number[]} vertices array of even length
    */

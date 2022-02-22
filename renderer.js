@@ -3,11 +3,28 @@ import Util from "./utils.js";
 
 (() => {
   document.addEventListener("DOMContentLoaded", async (_e) => {
+    var isDragging = false;
+
     // Needed, prevent lookup before DOM ready
     /**
      * @type {HTMLCanvasElement}
      */
     const canvas = document.querySelector("#canvas");
+
+    /**
+     * @type {HTMLFormElement}
+     */
+    const form = document.forms["form"];
+
+    /**
+     * @type {HTMLInputElement}
+     */
+    const color = form["color"];
+
+    /**
+     * @type {HTMLSelectElement}
+     */
+    const select = form["shape"];
 
     const gl = canvas.getContext("webgl");
     if (!gl) {
@@ -16,7 +33,7 @@ import Util from "./utils.js";
 
     /* Initialize canvas */
     gl.viewport(0, 0, canvas.clientWidth, canvas.clientHeight);
-    gl.clearColor(0, 0, 0, 1);
+    gl.clearColor(0, 0, 0, 0);
 
     /* Initialize shader */
     let vertexShaderSource = "";
@@ -54,64 +71,61 @@ import Util from "./utils.js";
 
     const vColor = gl.getUniformLocation(program, "vColor");
 
-    const randomClipSpace = Util.randomClipSpace;
-
-    /* Depth test to avoid rendering overlapped shapes */
-    //gl.enable(gl.DEPTH_TEST);
-
-    const rects = Array(6)
-      .fill()
-      .map((_, i) =>
-        i % 2
-          ? new shapes.Rectangle(
-              randomClipSpace(),
-              randomClipSpace(),
-              [randomClipSpace(), randomClipSpace()],
-              [Math.random(), Math.random(), Math.random(), 1]
-            )
-          : new shapes.Square(
-              160,
-              [randomClipSpace(), randomClipSpace()],
-              [Math.random(), Math.random(), Math.random(), 1],
-              canvas
-            )
-      );
+    const objects = [];
 
     const render = () => {
       gl.clear(gl.COLOR_BUFFER_BIT);
-      rects.forEach((v) => v.render(gl, vColor));
+      objects.forEach((v) => {
+        if (v instanceof shapes.Square) {
+          v.render(gl, vColor);
+        } else if (v instanceof shapes.Rectangle) {
+          v.render(gl, vColor);
+        }
+      });
     };
 
-    const poly = document.getElementById("polygon");
-    const rectangle = document.getElementById("rectangle");
-    const square = document.getElementById("square");
-    function log(msg) {
-      console.log(msg);
-    }
-    let mode = 0;
-    poly.addEventListener("click", () => {
-      mode = 0;
-      log(mode);
-    });
-    rectangle.addEventListener("click", () => {
-      mode = 1;
-      log(mode);
-    });
-    square.addEventListener("click", () => {
-      mode = 2;
-      log(mode);
+    document.addEventListener("mouseup", (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+
+      isDragging = false;
+
+      const drawnObject = objects[objects.length - 1];
+      if (drawnObject instanceof shapes.Square) {
+        drawnObject.setOpacity(1);
+      }
+      render();
     });
 
-    canvas.addEventListener("click", (ev) => {
-      if (mode == 2) {
-        rects.push(
+    canvas.addEventListener("mousedown", (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+
+      if (select.value === "Square") {
+        objects.push(
           new shapes.Square(
-            320,
-            Util.getCanvasCoordinate(ev, canvas),
-            [randomClipSpace(), randomClipSpace(), randomClipSpace()],
+            [ev.clientX, ev.clientY],
+            [ev.clientX, ev.clientY],
+            [...Util.convertToRGB(color.value), 0.6],
             canvas
           )
         );
+      }
+
+      isDragging = true;
+      render();
+    });
+
+    canvas.addEventListener("mousemove", (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+
+      if (!isDragging) return;
+
+      const drawnObject = objects[objects.length - 1];
+
+      if (drawnObject instanceof shapes.Square) {
+        drawnObject.setEnd([ev.clientX, ev.clientY]);
       }
 
       render();
