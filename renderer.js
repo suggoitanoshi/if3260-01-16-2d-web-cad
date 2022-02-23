@@ -80,6 +80,8 @@ import Util from "./utils.js";
           v.render(gl, vColor);
         } else if (v instanceof shapes.Rectangle) {
           v.render(gl, vColor);
+        } else if (v instanceof shapes.Polygon) {
+          v.render(gl, vColor);
         }
       });
     };
@@ -102,6 +104,7 @@ import Util from "./utils.js";
       ev.stopPropagation();
 
       if (select.value === "Square") {
+        console.log(ev.clientX);
         objects.push(
           new shapes.Square(
             [ev.clientX, ev.clientY],
@@ -127,8 +130,28 @@ import Util from "./utils.js";
       if (drawnObject instanceof shapes.Square) {
         drawnObject.setEnd([ev.clientX, ev.clientY]);
       }
+      if (drawnObject instanceof shapes.Polygon) {
+        drawnObject.setPoints([ev.clientX, ev.clientY]);
+      }
 
       render();
+    });
+
+    canvas.addEventListener("click", (ev) => {
+      console.log(objects);
+      console.log(ev.clientX);
+
+      objects.push(
+        new shapes.Polygon([ev.clientX, ev.clientY], [0, 0, 0, 1], canvas)
+      );
+      render();
+    });
+
+    const clear = document.getElementById("Clear");
+    clear.addEventListener("click", () => {
+      gl.clearColor(1, 1, 1, 1);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      objects.length = 0;
     });
 
     render();
