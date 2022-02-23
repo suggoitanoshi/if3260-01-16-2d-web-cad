@@ -36,6 +36,46 @@ const Util = {
   },
 
   randomClipSpace: () => Math.random() * 2 - 1,
+
+  /**
+   * @param {number} x
+   * @param {HTMLCanvasElement} canvas
+   */
+  scaleWidth: (x, canvas) => (x * 2) / canvas.clientWidth,
+
+  /**
+   *
+   * @param {number} y
+   * @param {HTMLCanvasElement} canvas
+   */
+  scaleHeight: (y, canvas) => (y * 2) / canvas.clientHeight,
+
+  /**
+   * @param {number} x
+   * @param {number} y
+   * @param {HTMLCanvasElement} canvas
+   */
+  getCanvasCoordinate: (x, y, canvas) => [
+    -1 + Util.scaleWidth(x - canvas.offsetLeft, canvas),
+    1 - Util.scaleHeight(y - canvas.offsetTop, canvas),
+  ],
+
+  /**
+   * @param {string} colorHexa
+   */
+  convertToRGB: (colorHexa) => {
+    const RGB = colorHexa.slice(1);
+
+    const R = RGB.slice(0, 2);
+    const G = RGB.slice(2, 4);
+    const B = RGB.slice(4, 6);
+
+    return [
+      parseInt(R, 16) / 255,
+      parseInt(G, 16) / 255,
+      parseInt(B, 16) / 255,
+    ];
+  },
 };
 
 export default Util;

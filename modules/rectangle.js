@@ -12,17 +12,19 @@ class Rectangle extends Object {
   #width;
 
   /**
+   * @public
    * @type {number}
    */
   #height;
 
   /**
+   * @public
    * @type {number[]} array of length 2
    */
   #bottomLeft;
 
   /**
-   *
+   * @public
    * @param {number} width
    * @param {number} height
    * @param {number[]} bottomLeft array of length 2
@@ -30,6 +32,7 @@ class Rectangle extends Object {
    */
   constructor(width, height, bottomLeft, color) {
     super(OBJECT_TYPES.RECT);
+
     this.#width = width;
     this.#height = height;
     this.#bottomLeft = bottomLeft;
