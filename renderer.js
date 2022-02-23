@@ -100,6 +100,7 @@ import Util from "./utils.js";
     });
 
     canvas.addEventListener("mousedown", (ev) => {
+      const drawnObject = objects[objects.length - 1];
       ev.preventDefault();
       ev.stopPropagation();
 
@@ -114,6 +115,31 @@ import Util from "./utils.js";
           )
         );
       }
+      /* IF POLYGON */
+
+      if (select.value === "Polygon") {
+        if (drawnObject instanceof shapes.Polygon) {
+          if (!drawnObject.isFinished()) {
+            drawnObject.addPoints([ev.clientX, ev.clientY], canvas);
+          } else {
+            objects.push(
+              new shapes.Polygon(
+                [ev.clientX, ev.clientY],
+                [...Util.convertToRGB(color.value), 1],
+                canvas
+              )
+            );
+          }
+        } else {
+          objects.push(
+            new shapes.Polygon(
+              [ev.clientX, ev.clientY],
+              [...Util.convertToRGB(color.value), 1],
+              canvas
+            )
+          );
+        }
+      }
 
       isDragging = true;
       render();
@@ -123,28 +149,26 @@ import Util from "./utils.js";
       ev.preventDefault();
       ev.stopPropagation();
 
-      if (!isDragging) return;
-
       const drawnObject = objects[objects.length - 1];
 
       if (drawnObject instanceof shapes.Square) {
+        if (!isDragging) return;
         drawnObject.setEnd([ev.clientX, ev.clientY]);
       }
       if (drawnObject instanceof shapes.Polygon) {
-        drawnObject.setPoints([ev.clientX, ev.clientY]);
+        drawnObject.updatePoints([ev.clientX, ev.clientY], canvas);
       }
 
       render();
     });
 
-    canvas.addEventListener("click", (ev) => {
-      console.log(objects);
-      console.log(ev.clientX);
-
-      objects.push(
-        new shapes.Polygon([ev.clientX, ev.clientY], [0, 0, 0, 1], canvas)
-      );
-      render();
+    canvas.addEventListener("dblclick", (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      const drawnObject = objects[objects.length - 1];
+      if (drawnObject instanceof shapes.Polygon) {
+        drawnObject.setFinished();
+      }
     });
 
     const clear = document.getElementById("Clear");

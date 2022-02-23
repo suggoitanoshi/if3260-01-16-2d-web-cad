@@ -22,17 +22,17 @@ class Circle extends Object {
    * @param {number[]} color array of (r, g, b) or (r, g, b, a)
    */
   constructor(center, color, canvas) {
-    super(OBJECT_TYPES.RECT);
+    super(OBJECT_TYPES.POLY);
     var r = 0.01;
 
-    var _center = Util.getCanvasCoordinate(center[0], center[1], canvas);
+    this._center = Util.getCanvasCoordinate(center[0], center[1], canvas);
 
     this.setColor(color);
     var vertices = [];
     for (var i = 0; i <= 360; i++) {
       var temp = [
-        _center[0] + r * Math.cos((i * Math.PI * 2) / 180),
-        _center[1] + r * Math.sin((i * Math.PI * 2) / 180),
+        this._center[0] + r * Math.cos((i * Math.PI * 2) / 180),
+        this._center[1] + r * Math.sin((i * Math.PI * 2) / 180),
       ];
       vertices = vertices.concat(temp);
     }

@@ -60,11 +60,15 @@ class Object {
   }
 
   /**
-   * @param {number[]} vertices array
    * set vertices as is
+   * @param {number[]} vertices array
    */
   setPoints2(vertices) {
     this.#vertices = vertices;
+  }
+
+  getVertices() {
+    return this.#vertices;
   }
 
   /**
