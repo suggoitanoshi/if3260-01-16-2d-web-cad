@@ -60,6 +60,14 @@ class Object {
   }
 
   /**
+   * @param {number[]} vertices array
+   * set vertices as is
+   */
+  setPoints2(vertices) {
+    this.#vertices = vertices;
+  }
+
+  /**
    *
    * @param {WebGLRenderingContext} gl
    * @param {number} type WebGL Type
