@@ -4,21 +4,21 @@ import Object, { OBJECT_TYPES } from "./object.js";
 // TODO: Fix bug 1st click always not working
 class Polygon extends Object {
   /**
-   * Koordinat mouse
+   * Mouse coordinate on canvas
    * @public
    * @type {number[]} array of length 2
    */
   _center;
 
   /**
-   * Jumlah vertex
+   * Vertex count for rendering
    * @public
    * @type {number}
    */
   _count;
 
   /**
-   * Apakah sudah selesai
+   * Polygon finished status
    * @public
    * @type {boolean}
    */
@@ -39,6 +39,11 @@ class Polygon extends Object {
     this._count = 1;
   }
 
+  /**
+   * Update points, for "animating"
+   * @param {number[]} vertex
+   * @param {canvas} canvas
+   */
   updatePoints(vertex, canvas) {
     var vertices = this.getVertices();
     vertex = Util.getCanvasCoordinate(vertex[0], vertex[1], canvas);
@@ -47,6 +52,11 @@ class Polygon extends Object {
     this.setPoints2(vertices);
   }
 
+  /**
+   * Add points to polygon
+   * @param {number[]} vertex
+   * @param {canvas} canvas
+   */
   addPoints(vertex, canvas) {
     var vertices = this.getVertices();
     var vert = Util.getCanvasCoordinate(vertex[0], vertex[1], canvas);
@@ -55,10 +65,17 @@ class Polygon extends Object {
     this._count++;
   }
 
+  /**
+   * Set polygon as finished
+   */
   setFinished() {
     this._finished = true;
   }
 
+  /**
+   * Check if polygon is finished or not
+   * @returns boolean
+   */
   isFinished() {
     return this._finished;
   }
