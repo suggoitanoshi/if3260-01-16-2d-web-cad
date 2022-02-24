@@ -1,7 +1,8 @@
+import CanvasWrapper from "./modules/canvas.js";
 import shapes from "./modules/shapes.js";
-import Util from "./utils.js";
+import Util from "./modules/utils.js";
 
-(() => {
+(()=>{
   document.addEventListener("DOMContentLoaded", async (_e) => {
     var isDragging = false;
 
@@ -26,18 +27,10 @@ import Util from "./utils.js";
      */
     const select = form["shape"];
 
-    const gl = canvas.getContext("webgl");
-    if (!gl) {
-      return;
-    }
-
-    /* Initialize canvas */
-    gl.viewport(0, 0, canvas.clientWidth, canvas.clientHeight);
-    gl.clearColor(0, 0, 0, 0);
+    const canvasWrapper = new CanvasWrapper(640, 480, canvas);
 
     /* Initialize shader */
-    let vertexShaderSource = "";
-    let fragmentShaderSource = "";
+    let vertexShaderSource, fragmentShaderSource;
     try {
       vertexShaderSource = await fetch("vert_shader.glsl").then((data) =>
         data.text()
@@ -48,19 +41,8 @@ import Util from "./utils.js";
     } catch (e) {
       return;
     }
-
-    const vertexShader = Util.createShader(
-      gl,
-      gl.VERTEX_SHADER,
-      vertexShaderSource
-    );
-    const fragmentShader = Util.createShader(
-      gl,
-      gl.FRAGMENT_SHADER,
-      fragmentShaderSource
-    );
-    const program = Util.createProgram(gl, vertexShader, fragmentShader);
-    gl.useProgram(program);
+    const gl = canvasWrapper.initializeGL(vertexShaderSource, fragmentShaderSource);
+    const program = canvasWrapper.program;
 
     const positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
@@ -76,24 +58,24 @@ import Util from "./utils.js";
     const render = () => {
       gl.clear(gl.COLOR_BUFFER_BIT);
       objects.forEach((v) => {
-        if (v instanceof shapes.Square) {
-          v.render(gl, vColor);
-        } else if (v instanceof shapes.Rectangle) {
-          v.render(gl, vColor);
-        }
+        v.render(gl, vColor);
+        if(mode !== 'create') v.renderControl(gl, vColor, mode);
       });
     };
 
+    let mode = 'create';
+    let dragObject = null;
+    
     document.addEventListener("mouseup", (ev) => {
       ev.preventDefault();
       ev.stopPropagation();
 
+      if(!isDragging) return;
+      dragObject = null;
       isDragging = false;
 
       const drawnObject = objects[objects.length - 1];
-      if (drawnObject instanceof shapes.Square) {
-        drawnObject.setOpacity(1);
-      }
+      drawnObject.setOpacity(1);
       render();
     });
 
@@ -101,15 +83,34 @@ import Util from "./utils.js";
       ev.preventDefault();
       ev.stopPropagation();
 
-      if (select.value === "Square") {
-        objects.push(
-          new shapes.Square(
-            [ev.clientX, ev.clientY],
-            [ev.clientX, ev.clientY],
-            [...Util.convertToRGB(color.value), 0.6],
-            canvas
-          )
-        );
+      if(mode === 'create'){
+        if (select.value === "Square") {
+          objects.push(
+            new shapes.Square(
+              [ev.clientX, ev.clientY],
+              [ev.clientX, ev.clientY],
+              [...Util.convertToRGB(color.value), 0.6],
+              canvas
+            )
+          );
+        }
+        else if(select.value === 'Rectangle'){
+          objects.push(
+            new shapes.Rectangle(
+              0,0,
+              canvasWrapper.canvasToClip(ev.clientX, ev.clientY),
+              [...Util.convertToRGB(color.value), 0.6],
+            )
+          );
+        }
+      }
+      else if(mode === 'move'){
+        const points = objects.map(v => { return {obj: v, dist: Util.euclidDist(v.anchorPoint, canvasWrapper.canvasToClip(ev.clientX, ev.clientY))}; }).filter(v => v.dist <= .05).sort((a, b) => a.dist - b.dist);
+        dragObject = points?.[0]?.obj;
+      }
+      else if(mode === 'resize'){
+        const points = objects.map(v => { return {obj: v, dist: Util.euclidDist(v.handlePoint, canvasWrapper.canvasToClip(ev.clientX, ev.clientY))}; }).filter(v => v.dist <= .05).sort((a, b) => a.dist - b.dist);
+        dragObject = points?.[0]?.obj;
       }
 
       isDragging = true;
@@ -121,16 +122,40 @@ import Util from "./utils.js";
       ev.stopPropagation();
 
       if (!isDragging) return;
+      else{
+        if(mode === 'create' || mode === 'resize'){
+          let drawnObject;
+          if(mode === 'create')
+            drawnObject = objects[objects.length - 1];
+          else if(mode === 'resize'){
+            if(!dragObject) return;
+            drawnObject = dragObject;
+          }
 
-      const drawnObject = objects[objects.length - 1];
-
-      if (drawnObject instanceof shapes.Square) {
-        drawnObject.setEnd([ev.clientX, ev.clientY]);
+          if (drawnObject instanceof shapes.Square) {
+            drawnObject.setEnd([ev.clientX, ev.clientY]);
+          }
+          else if(drawnObject instanceof shapes.Rectangle){
+            const clipCoords = canvasWrapper.canvasToClip(ev.clientX, ev.clientY);
+            drawnObject.updateSizing(clipCoords[0] - drawnObject.anchorPoint[0], clipCoords[1] - drawnObject.anchorPoint[1]);
+          }
+        }
+        else if(mode === 'move'){
+          if(!dragObject) return;
+          const clipCoords = canvasWrapper.canvasToClip(ev.clientX, ev.clientY);
+          dragObject.move(clipCoords[0]-dragObject.anchorPoint[0], clipCoords[1]-dragObject.anchorPoint[1]);
+        }
       }
-
       render();
     });
 
-    render();
+    const modeIndicator = document.querySelector('.mode');
+    ['create', 'move', 'resize'].forEach(v => {
+      document.querySelector(`.${v}`).addEventListener('click', e => {
+        mode = v;
+        modeIndicator.innerText = v;
+        render();
+      });
+    })
   });
-})(); // IIFE
+})();

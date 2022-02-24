@@ -131,6 +131,7 @@ export default class Square extends Object {
         .map(([x, y]) => Util.getCanvasCoordinate(x, y, this._cnv))
         .flat()
     );
+    this.setControls([this.points[0], this.points[1]], [this.points[4], this.points[5]]);
   }
 
   /**

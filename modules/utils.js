@@ -76,6 +76,14 @@ const Util = {
       parseInt(B, 16) / 255,
     ];
   },
+  /**
+   * 
+   * @param {[number,number]} a point a
+   * @param {[number,number]} b point b
+   */
+  euclidDist: (a, b) => {
+    return Math.sqrt((a[0]-b[0])**2 + (a[1]-b[1])**2)
+  },
 };
 
 export default Util;

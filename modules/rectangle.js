@@ -1,54 +1,47 @@
 import Object, { OBJECT_TYPES } from "./object.js";
 
 class Rectangle extends Object {
-  /**
-   * @type {number[]} array of length 2
-   */
-  #handle;
-
-  /**
-   * @type {number}
-   */
+  /** @type {number} */
   #width;
 
-  /**
-   * @public
-   * @type {number}
-   */
+  /** @type {number} */
   #height;
 
   /**
-   * @public
-   * @type {number[]} array of length 2
-   */
-  #bottomLeft;
-
-  /**
-   * @public
-   * @param {number} width
-   * @param {number} height
-   * @param {number[]} bottomLeft array of length 2
-   * @param {number[]} color array of (r, g, b) or (r, g, b, a)
+   * @param {number} width width of rect in clip space
+   * @param {number} height height of rect in clip space
+   * @param {[number, number]} bottomLeft the "bottom left" (anchor) of the rect
+   * @param {[number,number,number,number?]} color color array in rgba
    */
   constructor(width, height, bottomLeft, color) {
     super(OBJECT_TYPES.RECT);
 
-    this.#width = width;
-    this.#height = height;
-    this.#bottomLeft = bottomLeft;
+    this.setControls(bottomLeft, null);
+
+    this.updateSizing(width, height);
 
     this.setColor(color);
+  }
+
+  /**
+   * Function to update sizing (width/height)
+   * @param {number} width new width in clip space
+   * @param {number} height new height in clip space
+   */
+  updateSizing(width, height){
+    this.#width = width;
+    this.#height = height;
 
     this.setPoints(
       [
-        bottomLeft,
-        [bottomLeft[0] + width, bottomLeft[1]],
-        [bottomLeft[0] + width, bottomLeft[1] + height],
-        [bottomLeft[0], bottomLeft[1] + height],
+        this.anchorPoint,
+        [this.anchorPoint[0] + width, this.anchorPoint[1]],
+        [this.anchorPoint[0] + width, this.anchorPoint[1] + height],
+        [this.anchorPoint[0], this.anchorPoint[1] + height],
       ].flat()
     );
 
-    this.#handle = [bottomLeft[0] + width, bottomLeft[1] + height];
+    this.setControls(null, [this.anchorPoint[0] + width, this.anchorPoint[1] + height]);
   }
 
   /**
