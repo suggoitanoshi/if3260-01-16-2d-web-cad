@@ -52,10 +52,9 @@ class Object {
   }
 
   /**
-   * @param {number[]} vertices array of even length
+   * @param {number[]} vertices array of vertices
    */
   setPoints(vertices) {
-    if (vertices.length % 2) vertices = vertices.concat(0);
     this.#vertices = vertices;
   }
 
