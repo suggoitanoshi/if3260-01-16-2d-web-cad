@@ -96,6 +96,18 @@ class Object {
   }
 
   /**
+   * set vertices as is
+   * @param {number[]} vertices array
+   */
+  setPoints2(vertices) {
+    this.#vertices = vertices;
+  }
+
+  getVertices() {
+    return this.#vertices;
+  }
+
+  /**
    *
    * @param {WebGLRenderingContext} gl
    * @param {number} type WebGL Type

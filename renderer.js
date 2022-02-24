@@ -80,6 +80,7 @@ import Util from "./modules/utils.js";
     });
 
     canvas.addEventListener("mousedown", (ev) => {
+      const drawnObject = objects[objects.length - 1];
       ev.preventDefault();
       ev.stopPropagation();
 
@@ -112,6 +113,31 @@ import Util from "./modules/utils.js";
         const points = objects.map(v => { return {obj: v, dist: Util.euclidDist(v.handlePoint, canvasWrapper.canvasToClip(ev.clientX, ev.clientY))}; }).filter(v => v.dist <= .05).sort((a, b) => a.dist - b.dist);
         dragObject = points?.[0]?.obj;
       }
+      /* IF POLYGON */
+
+      if (select.value === "Polygon") {
+        if (drawnObject instanceof shapes.Polygon) {
+          if (!drawnObject.isFinished()) {
+            drawnObject.addPoints([ev.clientX, ev.clientY], canvas);
+          } else {
+            objects.push(
+              new shapes.Polygon(
+                [ev.clientX, ev.clientY],
+                [...Util.convertToRGB(color.value), 1],
+                canvas
+              )
+            );
+          }
+        } else {
+          objects.push(
+            new shapes.Polygon(
+              [ev.clientX, ev.clientY],
+              [...Util.convertToRGB(color.value), 1],
+              canvas
+            )
+          );
+        }
+      }
 
       isDragging = true;
       render();
@@ -135,6 +161,9 @@ import Util from "./modules/utils.js";
           if (drawnObject instanceof shapes.Square) {
             drawnObject.setEnd([ev.clientX, ev.clientY]);
           }
+          else if (drawnObject instanceof shapes.Polygon) {
+            drawnObject.updatePoints([ev.clientX, ev.clientY], canvas);
+          }
           else if(drawnObject instanceof shapes.Rectangle){
             const clipCoords = canvasWrapper.canvasToClip(ev.clientX, ev.clientY);
             drawnObject.updateSizing(clipCoords[0] - drawnObject.anchorPoint[0], clipCoords[1] - drawnObject.anchorPoint[1]);
@@ -157,5 +186,22 @@ import Util from "./modules/utils.js";
         render();
       });
     })
+
+    canvas.addEventListener("dblclick", (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      const drawnObject = objects[objects.length - 1];
+      if (drawnObject instanceof shapes.Polygon) {
+        drawnObject.setFinished();
+      }
+    });
+
+    const clear = document.getElementById("Clear");
+    clear.addEventListener("click", () => {
+      objects.length = 0;
+      render();
+    });
+
+    render();
   });
 })();
