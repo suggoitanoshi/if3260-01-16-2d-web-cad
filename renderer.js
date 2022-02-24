@@ -104,21 +104,21 @@ import Util from "./modules/utils.js";
             )
           );
         }
-      }
-      else if(mode === 'move'){
-        const points = objects.map(v => { return {obj: v, dist: Util.euclidDist(v.anchorPoint, canvasWrapper.canvasToClip(ev.clientX, ev.clientY))}; }).filter(v => v.dist <= .05).sort((a, b) => a.dist - b.dist);
-        dragObject = points?.[0]?.obj;
-      }
-      else if(mode === 'resize'){
-        const points = objects.map(v => { return {obj: v, dist: Util.euclidDist(v.handlePoint, canvasWrapper.canvasToClip(ev.clientX, ev.clientY))}; }).filter(v => v.dist <= .05).sort((a, b) => a.dist - b.dist);
-        dragObject = points?.[0]?.obj;
-      }
-      /* IF POLYGON */
+        /* IF POLYGON */
 
-      if (select.value === "Polygon") {
-        if (drawnObject instanceof shapes.Polygon) {
-          if (!drawnObject.isFinished()) {
-            drawnObject.addPoints([ev.clientX, ev.clientY], canvas);
+        else if (select.value === "Polygon") {
+          if (drawnObject instanceof shapes.Polygon) {
+            if (!drawnObject.isFinished()) {
+              drawnObject.addPoints([ev.clientX, ev.clientY], canvas);
+            } else {
+              objects.push(
+                new shapes.Polygon(
+                  [ev.clientX, ev.clientY],
+                  [...Util.convertToRGB(color.value), 1],
+                  canvas
+                )
+              );
+            }
           } else {
             objects.push(
               new shapes.Polygon(
@@ -128,15 +128,21 @@ import Util from "./modules/utils.js";
               )
             );
           }
-        } else {
-          objects.push(
-            new shapes.Polygon(
-              [ev.clientX, ev.clientY],
-              [...Util.convertToRGB(color.value), 1],
-              canvas
-            )
-          );
         }
+
+        else if(select.value === 'Line'){
+          const clipCoord = canvasWrapper.canvasToClip(ev.clientX, ev.clientY)
+          if(drawnObject instanceof shapes.Line && !drawnObject.end) drawnObject.setEnd(clipCoord)
+          else objects.push(new shapes.Line(clipCoord, [...Util.convertToRGB(color.value), 1]));
+        }
+      }
+      else if(mode === 'move'){
+        const points = objects.map(v => { return {obj: v, dist: Util.euclidDist(v.anchorPoint, canvasWrapper.canvasToClip(ev.clientX, ev.clientY))}; }).filter(v => v.dist <= .05).sort((a, b) => a.dist - b.dist);
+        dragObject = points?.[0]?.obj;
+      }
+      else if(mode === 'resize'){
+        const points = objects.map(v => { return {obj: v, dist: Util.euclidDist(v.handlePoint, canvasWrapper.canvasToClip(ev.clientX, ev.clientY))}; }).filter(v => v.dist <= .05).sort((a, b) => a.dist - b.dist);
+        dragObject = points?.[0]?.obj;
       }
 
       isDragging = true;
@@ -162,11 +168,22 @@ import Util from "./modules/utils.js";
             drawnObject.setEnd([ev.clientX, ev.clientY]);
           }
           else if (drawnObject instanceof shapes.Polygon) {
-            drawnObject.updatePoints([ev.clientX, ev.clientY], canvas);
+            if(mode === 'create')
+              drawnObject.updatePoints([ev.clientX, ev.clientY], canvas);
+            else{
+              const [clipX, clipY] = canvasWrapper.canvasToClip(ev.clientX, ev.clientY);
+              const [anchorX, anchorY] = drawnObject.anchorPoint;
+              const [sizeX, sizeY] = [(clipX-anchorX)/(drawnObject.handlePoint[0]-anchorY), (clipY-anchorY)/(drawnObject.handlePoint[1] - anchorY)];
+              drawnObject.scale(sizeX, sizeY);
+            }
           }
           else if(drawnObject instanceof shapes.Rectangle){
             const clipCoords = canvasWrapper.canvasToClip(ev.clientX, ev.clientY);
             drawnObject.updateSizing(clipCoords[0] - drawnObject.anchorPoint[0], clipCoords[1] - drawnObject.anchorPoint[1]);
+          }
+          if((drawnObject instanceof shapes.Line) && mode === 'resize'){
+              const [clipX, clipY] = canvasWrapper.canvasToClip(ev.clientX, ev.clientY);
+              drawnObject.setEnd([clipX, clipY]);
           }
         }
         else if(mode === 'move'){

@@ -34,8 +34,6 @@ class Object {
 
   /** @type {number} */
   #controlSize = 0.05;
-  /** @type {number} */
-  #controlSizeHover = 0.09;
 
   /**
    * @param {keyof typeof OBJECT_TYPES} type
@@ -84,6 +82,13 @@ class Object {
     this.#vertices = this.#vertices.map((v, i) => v + (i % 2 === 0 ? deltaX : deltaY));
     this.#anchorPoint[0] += deltaX;
     this.#anchorPoint[1] += deltaY;
+    this.#handlePoint[0] += deltaX;
+    this.#handlePoint[1] += deltaY;
+  }
+
+  scale(scaleX, scaleY){
+    this.#vertices = this.#vertices.map((v, i) => (i % 2 === 0) ? (v * scaleX) : (v * scaleY));
+    this.#handlePoint = this.#handlePoint.map((v, i) => (i%2 === 0) ? (v * scaleX) : (v * scaleY));
   }
 
   /**
@@ -93,6 +98,14 @@ class Object {
   setControls(anchor, handle){
     this.#anchorPoint = anchor || this.#anchorPoint;
     this.#handlePoint = handle || this.#handlePoint;
+  }
+
+  set anchorPoint(val){
+    this.#anchorPoint = val;
+  }
+
+  set handlePoint(val){
+    this.#handlePoint = val;
   }
 
   /**
