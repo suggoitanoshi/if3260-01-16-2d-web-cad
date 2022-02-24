@@ -1,4 +1,4 @@
-import Util from "../utils.js";
+import Util from "./utils.js";
 import Object, { OBJECT_TYPES } from "./object.js";
 
 export default class Square extends Object {
@@ -32,15 +32,6 @@ export default class Square extends Object {
 
     this.setColor(color);
     this.setEnd(end);
-  }
-
-  /**
-   * @param {number} opacity
-   */
-  setOpacity(opacity) {
-    const rgb = this.getColor().slice(0, 3);
-
-    this.setColor([...rgb, opacity]);
   }
 
   /**

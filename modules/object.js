@@ -52,6 +52,14 @@ class Object {
   }
 
   /**
+   * Function to set opacity
+   * @param {number} opacity opacity [0..1] of the object
+   */
+  setOpacity(opacity){
+    this.#color[3] = opacity;
+  }
+
+  /**
    * @param {number[]} vertices array of vertices
    */
   setPoints(vertices) {
