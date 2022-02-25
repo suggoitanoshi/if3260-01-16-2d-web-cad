@@ -83,6 +83,7 @@ import Util from "./modules/utils.js";
     });
 
     canvas.addEventListener("mousedown", (ev) => {
+      console.log(ev);
       const drawnObject = objects[objects.length - 1];
       ev.preventDefault();
       ev.stopPropagation();
@@ -91,8 +92,8 @@ import Util from "./modules/utils.js";
         if (select.value === "Square") {
           objects.push(
             new shapes.Square(
-              [ev.clientX, ev.clientY],
-              [ev.clientX, ev.clientY],
+              [ev.pageX, ev.pageY],
+              [ev.pageX, ev.pageY],
               [...Util.convertToRGB(color.value), 0.6],
               canvas
             )
@@ -102,7 +103,7 @@ import Util from "./modules/utils.js";
             new shapes.Rectangle(
               0,
               0,
-              canvasWrapper.canvasToClip(ev.clientX, ev.clientY),
+              canvasWrapper.canvasToClip(ev.pageX, ev.pageY),
               [...Util.convertToRGB(color.value), 0.6]
             )
           );
@@ -110,11 +111,11 @@ import Util from "./modules/utils.js";
           /* IF POLYGON */
           if (drawnObject instanceof shapes.Polygon) {
             if (!drawnObject.isFinished()) {
-              drawnObject.addPoints([ev.clientX, ev.clientY], canvas);
+              drawnObject.addPoints([ev.pageX, ev.pageY], canvas);
             } else {
               objects.push(
                 new shapes.Polygon(
-                  [ev.clientX, ev.clientY],
+                  [ev.pageX, ev.pageY],
                   [...Util.convertToRGB(color.value), 1],
                   canvas
                 )
@@ -123,14 +124,14 @@ import Util from "./modules/utils.js";
           } else {
             objects.push(
               new shapes.Polygon(
-                [ev.clientX, ev.clientY],
+                [ev.pageX, ev.pageY],
                 [...Util.convertToRGB(color.value), 1],
                 canvas
               )
             );
           }
         } else if (select.value === "Line") {
-          const clipCoord = canvasWrapper.canvasToClip(ev.clientX, ev.clientY);
+          const clipCoord = canvasWrapper.canvasToClip(ev.pageX, ev.pageY);
           objects.push(
             new shapes.Line(clipCoord, [...Util.convertToRGB(color.value), 1])
           );
@@ -142,7 +143,7 @@ import Util from "./modules/utils.js";
               obj: v,
               dist: Util.euclidDist(
                 v.anchorPoint,
-                canvasWrapper.canvasToClip(ev.clientX, ev.clientY)
+                canvasWrapper.canvasToClip(ev.pageX, ev.pageY)
               ),
             };
           })
@@ -156,7 +157,7 @@ import Util from "./modules/utils.js";
               obj: v,
               dist: Util.euclidDist(
                 v.handlePoint,
-                canvasWrapper.canvasToClip(ev.clientX, ev.clientY)
+                canvasWrapper.canvasToClip(ev.pageX, ev.pageY)
               ),
             };
           })
@@ -184,14 +185,14 @@ import Util from "./modules/utils.js";
           }
 
           if (drawnObject instanceof shapes.Square) {
-            drawnObject.setEnd([ev.clientX, ev.clientY]);
+            drawnObject.setEnd([ev.pageX, ev.pageY]);
           } else if (drawnObject instanceof shapes.Polygon) {
             if (mode === "create") {
-              drawnObject.updatePoints([ev.clientX, ev.clientY], canvas);
+              drawnObject.updatePoints([ev.pageX, ev.pageY], canvas);
             } else {
               const [clipX, clipY] = canvasWrapper.canvasToClip(
-                ev.clientX,
-                ev.clientY
+                ev.pageX,
+                ev.pageY
               );
               const [anchorX, anchorY] = drawnObject.anchorPoint;
               const [sizeX, sizeY] = [
@@ -201,24 +202,21 @@ import Util from "./modules/utils.js";
               drawnObject.scale(sizeX, sizeY);
             }
           } else if (drawnObject instanceof shapes.Rectangle) {
-            const clipCoords = canvasWrapper.canvasToClip(
-              ev.clientX,
-              ev.clientY
-            );
+            const clipCoords = canvasWrapper.canvasToClip(ev.pageX, ev.pageY);
             drawnObject.updateSizing(
               clipCoords[0] - drawnObject.anchorPoint[0],
               clipCoords[1] - drawnObject.anchorPoint[1]
             );
           } else if (drawnObject instanceof shapes.Line) {
             const [clipX, clipY] = canvasWrapper.canvasToClip(
-              ev.clientX,
-              ev.clientY
+              ev.pageX,
+              ev.pageY
             );
             drawnObject.setEnd([clipX, clipY]);
           }
         } else if (mode === "move") {
           if (!dragObject) return;
-          const clipCoords = canvasWrapper.canvasToClip(ev.clientX, ev.clientY);
+          const clipCoords = canvasWrapper.canvasToClip(ev.pageX, ev.pageY);
           dragObject.move(
             clipCoords[0] - dragObject.anchorPoint[0],
             clipCoords[1] - dragObject.anchorPoint[1]

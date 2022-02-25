@@ -13,8 +13,8 @@ export default class Square extends Object {
   _cnv;
 
   /**
-   * @param {number[]} start real (x, y) HTML Elements in canvas, taken from clientX and clientY
-   * @param {number[]} end real (x, y) HTML Elements in canvas, taken from clientX and clientY
+   * @param {number[]} start real (x, y) HTML Elements in canvas, taken from pageX and pageY
+   * @param {number[]} end real (x, y) HTML Elements in canvas, taken from pageX and pageY
    * @param {number[]} color array of 3 elements [r, g, b] or 4 elements [r, g, b, a]
    * @param {HTMLCanvasElement} canvas the canvas this square is in
    */
@@ -30,7 +30,7 @@ export default class Square extends Object {
   }
 
   /**
-   * @param {number[]} end real (x, y) HTML Elements in canvas, taken from clientX and clientY
+   * @param {number[]} end real (x, y) HTML Elements in canvas, taken from pageX and pageY
    */
   setEnd(end) {
     /**
