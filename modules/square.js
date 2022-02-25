@@ -49,7 +49,10 @@ export default class Square extends Object {
         .flat()
     );
 
-    this.setControls(this._start, this._start);
+    this.setControls(
+      [this.points[0], this.points[1]],
+      [this.points[4], this.points[5]]
+    );
   }
 
   /**
