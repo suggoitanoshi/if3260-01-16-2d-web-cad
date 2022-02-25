@@ -33,17 +33,41 @@ export default class Square extends Object {
    * @param {number[]} end real (x, y) HTML Elements in canvas, taken from clientX and clientY
    */
   setEnd(end) {
+    /**
+     * @type {number}
+     */
+    var deltaX;
+
+    /**
+     * @type {number}
+     */
+    var deltaY;
+
     const minimumSides = Math.min(
       Math.abs(this._start[0] - end[0]),
       Math.abs(this._start[1] - end[1])
     );
 
+    const quadrans = [end[0] - this._start[0], end[1] - this._start[1]];
+
+    if (quadrans[0] >= 0 && quadrans[1] >= 0) {
+      deltaX = deltaY = minimumSides;
+    } else if (quadrans[0] >= 0 && quadrans[1] < 0) {
+      deltaY = -minimumSides;
+      deltaX = minimumSides;
+    } else if (quadrans[0] < 0 && quadrans[1] >= 0) {
+      deltaY = minimumSides;
+      deltaX = -minimumSides;
+    } else {
+      deltaY = deltaX = -minimumSides;
+    }
+
     this.setPoints(
       [
         this._start,
-        [this._start[0] + minimumSides, this._start[1]],
-        [this._start[0] + minimumSides, this._start[1] + minimumSides],
-        [this._start[0], this._start[1] + minimumSides],
+        [this._start[0] + deltaX, this._start[1]],
+        [this._start[0] + deltaX, this._start[1] + deltaY],
+        [this._start[0], this._start[1] + deltaY],
       ]
         .map(([x, y]) => Util.getCanvasCoordinate(x, y, this._cnv))
         .flat()
