@@ -16,7 +16,9 @@ class Object {
    * @type {number[]} array of 2 elements
    */
   #vertices; // vertices, should be in clip space but debatable
-  get points(){ return this.#vertices; }
+  get points() {
+    return this.#vertices;
+  }
 
   /**
    * @public
@@ -26,11 +28,15 @@ class Object {
 
   /** @type {[number,number]} coordinate of control point in clip space */
   #handlePoint;
-  get handlePoint(){ return this.#handlePoint; }
+  get handlePoint() {
+    return this.#handlePoint;
+  }
 
   /** @type {[number,number]} coordinate of anchor point in clip space */
   #anchorPoint;
-  get anchorPoint(){ return this.#anchorPoint; }
+  get anchorPoint() {
+    return this.#anchorPoint;
+  }
 
   /** @type {number} */
   #controlSize = 0.05;
@@ -50,7 +56,7 @@ class Object {
   }
 
   /**
-   * @param {number[]} color array of (r, g, b) or (r, g, b, a)
+   * @param {[number, number, number, number?]} color array of (r, g, b) or (r, g, b, a)
    */
   setColor(color) {
     // default value of a is 1
@@ -67,7 +73,7 @@ class Object {
    * Function to set opacity
    * @param {number} opacity opacity [0..1] of the object
    */
-  setOpacity(opacity){
+  setOpacity(opacity) {
     this.#color[3] = opacity;
   }
 
@@ -78,33 +84,39 @@ class Object {
     this.#vertices = vertices;
   }
 
-  move(deltaX, deltaY){
-    this.#vertices = this.#vertices.map((v, i) => v + (i % 2 === 0 ? deltaX : deltaY));
+  move(deltaX, deltaY) {
+    this.#vertices = this.#vertices.map(
+      (v, i) => v + (i % 2 === 0 ? deltaX : deltaY)
+    );
     this.#anchorPoint[0] += deltaX;
     this.#anchorPoint[1] += deltaY;
     this.#handlePoint[0] += deltaX;
     this.#handlePoint[1] += deltaY;
   }
 
-  scale(scaleX, scaleY){
-    this.#vertices = this.#vertices.map((v, i) => (i % 2 === 0) ? (v * scaleX) : (v * scaleY));
-    this.#handlePoint = this.#handlePoint.map((v, i) => (i%2 === 0) ? (v * scaleX) : (v * scaleY));
+  scale(scaleX, scaleY) {
+    this.#vertices = this.#vertices.map((v, i) =>
+      i % 2 === 0 ? v * scaleX : v * scaleY
+    );
+    this.#handlePoint = this.#handlePoint.map((v, i) =>
+      i % 2 === 0 ? v * scaleX : v * scaleY
+    );
   }
 
   /**
-   * @param {[number,number]} anchor anchor point
-   * @param {[number,number]} handle handle point
+   * @param {[number, number]} anchor anchor point
+   * @param {[number, number]} handle handle point
    */
-  setControls(anchor, handle){
+  setControls(anchor, handle) {
     this.#anchorPoint = anchor || this.#anchorPoint;
     this.#handlePoint = handle || this.#handlePoint;
   }
 
-  set anchorPoint(val){
+  set anchorPoint(val) {
     this.#anchorPoint = val;
   }
 
-  set handlePoint(val){
+  set handlePoint(val) {
     this.#handlePoint = val;
   }
 
@@ -137,25 +149,26 @@ class Object {
     gl.drawArrays(type, 0, count); // draw the vertices
   }
 
-  renderControl(gl, uniformColor, type){
-    if(type !== 'move' && type !== 'resize') throw new Error();
-    const center = type === 'move' ? this.#anchorPoint : this.#handlePoint;
+  renderControl(gl, uniformColor, type) {
+    if (type !== "move" && type !== "resize") throw new Error();
+    const center = type === "move" ? this.#anchorPoint : this.#handlePoint;
     const n = 10;
-    const controlPoints = Array(n).fill().map((_, i) => [
-      center[0] + (this.#controlSize * Math.cos(i*2*Math.PI/n)),
-      center[1] + (this.#controlSize * Math.sin(i*2*Math.PI/n))
-    ]);
+    const controlPoints = Array(n)
+      .fill()
+      .map((_, i) => [
+        center[0] + this.#controlSize * Math.cos((i * 2 * Math.PI) / n),
+        center[1] + this.#controlSize * Math.sin((i * 2 * Math.PI) / n),
+      ]);
     controlPoints.push(controlPoints[0]);
     controlPoints.unshift(center);
-    gl.uniform4f(uniformColor, ...this.#color.slice(0,3), .4);
+    gl.uniform4f(uniformColor, ...this.#color.slice(0, 3), 0.4);
     gl.bufferData(
       gl.ARRAY_BUFFER,
       new Float32Array(controlPoints.flat()),
       gl.STATIC_DRAW
     );
-    gl.drawArrays(gl.TRIANGLE_FAN, 0, n+2);
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, n + 2);
   }
-
 }
 
 export default Object;

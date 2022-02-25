@@ -28,7 +28,7 @@ class Rectangle extends Object {
    * @param {number} width new width in clip space
    * @param {number} height new height in clip space
    */
-  updateSizing(width, height){
+  updateSizing(width, height) {
     this.#width = width;
     this.#height = height;
 
@@ -41,7 +41,10 @@ class Rectangle extends Object {
       ].flat()
     );
 
-    this.setControls(null, [this.anchorPoint[0] + width, this.anchorPoint[1] + height]);
+    this.setControls(null, [
+      this.anchorPoint[0] + width,
+      this.anchorPoint[1] + height,
+    ]);
   }
 
   /**

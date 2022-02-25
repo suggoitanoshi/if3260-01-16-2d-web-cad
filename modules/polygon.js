@@ -66,11 +66,15 @@ class Polygon extends Object {
     this.setPoints2(vertices);
     this._count++;
 
-    if(vert[0] < this.anchorPoint[0]) this.anchorPoint = [vert[0], this.anchorPoint[1]];
-    if(vert[1] < this.anchorPoint[1]) this.anchorPoint = [this.anchorPoint[1], vert[1]];
+    if (vert[0] < this.anchorPoint[0])
+      this.anchorPoint = [vert[0], this.anchorPoint[1]];
+    if (vert[1] < this.anchorPoint[1])
+      this.anchorPoint = [this.anchorPoint[1], vert[1]];
 
-    if(vert[0] > this.handlePoint[0]) this.handlePoint = [vert[0], this.handlePoint[1]];
-    if(vert[1] > this.handlePoint[1]) this.handlePoint = [this.handlePoint[1], vert[1]];
+    if (vert[0] > this.handlePoint[0])
+      this.handlePoint = [vert[0], this.handlePoint[1]];
+    if (vert[1] > this.handlePoint[1])
+      this.handlePoint = [this.handlePoint[1], vert[1]];
   }
 
   /**

@@ -8,11 +8,6 @@ export default class Square extends Object {
   _start;
 
   /**
-   * @type {number[]}
-   */
-  _end;
-
-  /**
    * @type {HTMLCanvasElement}
    */
   _cnv;
@@ -43,95 +38,18 @@ export default class Square extends Object {
       Math.abs(this._start[1] - end[1])
     );
 
-    if (minimumSides === 0) {
-      this._end = this._start;
-      this.setPoints([
-        ...this._start,
-        ...this._start,
-        ...this._start,
-        ...this._start,
-      ]);
-    }
-
-    const quadrans = [end[0] - this._start[0], end[1] - this._start[1]];
-
-    /**
-     * @type {number[]}
-     */
-    let endCoordinate = [];
-
-    /**
-     * @type {number[][]}
-     */
-    let endPoints = [];
-
-    if (quadrans[0] > 0) {
-      // draw from left to right
-      if (quadrans[1] > 0) {
-        // you could say that we draw from bottom-left to top-right
-        endCoordinate = [
-          this._start[0] + minimumSides,
-          this._start[1] + minimumSides,
-        ];
-        endPoints = [
-          this._start,
-          [this._start[0] + minimumSides, this._start[1]],
-          this._end,
-          [this._start[0], this._start[1] + minimumSides],
-        ];
-      } else {
-        // you could say that we draw from top-left to bottom-right
-        endCoordinate = [
-          this._start[0] + minimumSides,
-          this._start[1] - minimumSides,
-        ];
-
-        endPoints = [
-          this._start,
-          [this._start[0], this._start[1] - minimumSides],
-          this._end,
-          [this._start[0] + minimumSides, this._start[1]],
-        ];
-      }
-    } else {
-      // draw from right to left
-      if (quadrans[1] > 0) {
-        // draw from bottom-right to top-left
-        endCoordinate = [
-          this._start[0] - minimumSides,
-          this._start[1] + minimumSides,
-        ];
-
-        endPoints = [
-          this._start,
-          [this._start[0], this._start[1] + minimumSides],
-          this._end,
-          [this._start[0] - minimumSides, this._start[1]],
-        ];
-      } else {
-        // draw from top-right to bottom-left
-        endCoordinate = [
-          this._start[0] - minimumSides,
-          this._start[1] - minimumSides,
-        ];
-
-        endPoints = [
-          this._start,
-          [this._start[0] - minimumSides, this._start[1]],
-          this._end,
-          [this._start[0], this._start[1] - minimumSides],
-        ];
-      }
-    }
-
-    this._end = endCoordinate;
-
     this.setPoints(
-      endPoints
+      [
+        this._start,
+        [this._start[0] + minimumSides, this._start[1]],
+        [this._start[0] + minimumSides, this._start[1] + minimumSides],
+        [this._start[0], this._start[1] + minimumSides],
+      ]
         .map(([x, y]) => Util.getCanvasCoordinate(x, y, this._cnv))
         .flat()
     );
-    this.setControls([this.points[0], this.points[1]], [this.points[4], this.points[5]]);
+
+    this.setControls(this._start, this._start);
   }
 
   /**

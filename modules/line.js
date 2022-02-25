@@ -1,12 +1,15 @@
 import Object, { OBJECT_TYPES } from "./object.js";
 
 class Line extends Object {
-  /** @type {[number,number]} */
+  /** @type {[number, number]} */
   #start;
-  /** @type {[number,number]} */
+
+  /** @type {[number, number]} */
   #end;
 
-  get end(){ return this.#end; }
+  get end() {
+    return this.#end;
+  }
 
   /**
    * @public
@@ -20,9 +23,9 @@ class Line extends Object {
   }
 
   /**
-   * @param {[number,number]} end 
+   * @param {[number,number]} end
    */
-  setEnd(end){
+  setEnd(end) {
     this.#end = end;
     this.setPoints([...this.#start, ...this.#end]);
     this.setControls(this.#start, this.#end);

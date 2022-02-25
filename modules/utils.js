@@ -17,7 +17,6 @@ const Util = {
   },
 
   /**
-   *
    * @param {WebGLRenderingContext} gl
    * @param {WebGLShader} vertexShader
    * @param {WebGLShader} fragmentShader
@@ -62,6 +61,7 @@ const Util = {
 
   /**
    * @param {string} colorHexa
+   * @returns {[number, number, number]} RGB Value
    */
   convertToRGB: (colorHexa) => {
     const RGB = colorHexa.slice(1);
@@ -76,13 +76,13 @@ const Util = {
       parseInt(B, 16) / 255,
     ];
   },
+
   /**
-   * 
-   * @param {[number,number]} a point a
-   * @param {[number,number]} b point b
+   * @param {[number, number]} a point a
+   * @param {[number, number]} b point b
    */
   euclidDist: (a, b) => {
-    return Math.sqrt((a[0]-b[0])**2 + (a[1]-b[1])**2)
+    return Math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2);
   },
 };
 
