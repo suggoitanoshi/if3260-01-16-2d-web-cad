@@ -26,13 +26,13 @@ class Object {
    */
   #color; // quadruple of color (r,g,b,a)
 
-  /** @type {[number,number]} coordinate of control point in clip space */
+  /** @type {[number, number]} coordinate of control point in clip space */
   #handlePoint;
   get handlePoint() {
     return this.#handlePoint;
   }
 
-  /** @type {[number,number]} coordinate of anchor point in clip space */
+  /** @type {[number, number]} coordinate of anchor point in clip space */
   #anchorPoint;
   get anchorPoint() {
     return this.#anchorPoint;
@@ -150,8 +150,10 @@ class Object {
   }
 
   renderControl(gl, uniformColor, type) {
-    if (type !== "move" && type !== "resize") throw new Error();
+    if (type !== "move" && type !== "resize" && type !== "recolor")
+      throw new Error();
     const center = type === "move" ? this.#anchorPoint : this.#handlePoint;
+
     const n = 10;
     const controlPoints = Array(n)
       .fill()

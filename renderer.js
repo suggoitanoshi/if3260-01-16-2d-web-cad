@@ -83,7 +83,6 @@ import Util from "./modules/utils.js";
     });
 
     canvas.addEventListener("mousedown", (ev) => {
-      console.log(ev);
       const drawnObject = objects[objects.length - 1];
       ev.preventDefault();
       ev.stopPropagation();
@@ -164,6 +163,22 @@ import Util from "./modules/utils.js";
           .filter((v) => v.dist <= 0.05)
           .sort((a, b) => a.dist - b.dist);
         dragObject = points?.[0]?.obj;
+      } else if (mode === "recolor") {
+        const points = objects
+          .map((v) => {
+            return {
+              obj: v,
+              dist: Util.euclidDist(
+                v.handlePoint,
+                canvasWrapper.canvasToClip(ev.pageX, ev.pageY)
+              ),
+            };
+          })
+          .filter((v) => v.dist <= 0.05)
+          .sort((a, b) => a.dist - b.dist);
+        dragObject = points?.[0]?.obj;
+
+        dragObject.setColor(Util.convertToRGB(color.value));
       }
 
       isDragging = true;
@@ -227,7 +242,7 @@ import Util from "./modules/utils.js";
     });
 
     const modeIndicator = document.querySelector(".mode");
-    ["create", "move", "resize"].forEach((v) => {
+    ["create", "move", "resize", "recolor"].forEach((v) => {
       document.querySelector(`.${v}`).addEventListener("click", (e) => {
         mode = v;
         modeIndicator.innerText = v;
