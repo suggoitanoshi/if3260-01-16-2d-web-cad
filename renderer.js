@@ -94,8 +94,7 @@ import * as saveload from "./modules/saveload.js";
             new shapes.Square(
               [ev.pageX, ev.pageY],
               [ev.pageX, ev.pageY],
-              [...Util.convertToRGB(color.value), 0.6],
-              canvas
+              [...Util.convertToRGB(color.value), 0.6]
             )
           );
         } else if (select.value === "Rectangle") {

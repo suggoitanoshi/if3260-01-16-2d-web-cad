@@ -8,7 +8,7 @@ function save(objects) {
   objects.map((v) => {
     tmp.push(v.pack());
   });
-  var text = JSON.stringify(tmp);
+  var text = JSON.stringify(tmp, null, 2);
   var filename = "webgl";
   var element = document.createElement("a");
   element.setAttribute(
