@@ -18,11 +18,6 @@ class Polygon extends Object {
   _count;
 
   /**
-   * Vertices
-   */
-  _vertex;
-
-  /**
    * Polygon finished status
    * @public
    * @type {boolean}
@@ -37,7 +32,7 @@ class Polygon extends Object {
   constructor(center, color, canvas) {
     super(OBJECT_TYPES.POLY);
     this._finished = false;
-    this._center = Util.getCanvasCoordinate(center[0], center[1], canvas);
+    this._center = center;
     this.anchorPoint = this._center;
     this.handlePoint = this._center;
 
@@ -61,25 +56,23 @@ class Polygon extends Object {
 
   /**
    * Add points to polygon
-   * @param {number[]} vertex
-   * @param {canvas} canvas
+   * @param {[number, number]} vertex
    */
-  addPoints(vertex, canvas) {
+  addPoints(vertex) {
     var vertices = this.getVertices();
-    var vert = Util.getCanvasCoordinate(vertex[0], vertex[1], canvas);
-    vertices = vertices.concat(vert);
+    vertices = vertices.concat(vertex);
     this.setPoints2(vertices);
     this._count++;
 
-    if (vert[0] < this.anchorPoint[0])
-      this.anchorPoint = [vert[0], this.anchorPoint[1]];
-    if (vert[1] < this.anchorPoint[1])
-      this.anchorPoint = [this.anchorPoint[1], vert[1]];
+    if (vertex[0] < this.anchorPoint[0])
+      this.anchorPoint = [vertex[0], this.anchorPoint[1]];
+    if (vertex[1] < this.anchorPoint[1])
+      this.anchorPoint = [this.anchorPoint[1], vertex[1]];
 
-    if (vert[0] > this.handlePoint[0])
-      this.handlePoint = [vert[0], this.handlePoint[1]];
-    if (vert[1] > this.handlePoint[1])
-      this.handlePoint = [this.handlePoint[1], vert[1]];
+    if (vertex[0] > this.handlePoint[0])
+      this.handlePoint = [vertex[0], this.handlePoint[1]];
+    if (vertex[1] > this.handlePoint[1])
+      this.handlePoint = [this.handlePoint[1], vertex[1]];
   }
 
   /**

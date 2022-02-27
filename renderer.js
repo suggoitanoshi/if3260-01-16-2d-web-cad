@@ -111,13 +111,14 @@ import * as saveload from "./modules/saveload.js";
           /* IF POLYGON */
           if (drawnObject instanceof shapes.Polygon) {
             if (!drawnObject.isFinished()) {
-              drawnObject.addPoints([ev.pageX, ev.pageY], canvas);
+              drawnObject.addPoints(
+                canvasWrapper.canvasToClip(ev.pageX, ev.pageY)
+              );
             } else {
               objects.push(
                 new shapes.Polygon(
                   canvasWrapper.canvasToClip(ev.pageX, ev.pageY),
-                  [...Util.convertToRGB(color.value), 1],
-                  canvas
+                  [...Util.convertToRGB(color.value), 1]
                 )
               );
             }
