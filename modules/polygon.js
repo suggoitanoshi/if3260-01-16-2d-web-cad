@@ -26,10 +26,10 @@ class Polygon extends Object {
 
   /**
    * @public
-   * @param {number[]} center array of length 2
-   * @param {number[]} color array of (r, g, b) or (r, g, b, a)
+   * @param {[number, number]} center array of length 2
+   * @param {[number, number, number, number]} color array of (r, g, b) or (r, g, b, a)
    */
-  constructor(center, color, canvas) {
+  constructor(center, color) {
     super(OBJECT_TYPES.POLY);
     this._finished = false;
     this._center = center;

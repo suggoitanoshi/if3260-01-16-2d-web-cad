@@ -125,9 +125,8 @@ import * as saveload from "./modules/saveload.js";
           } else {
             objects.push(
               new shapes.Polygon(
-                [ev.pageX, ev.pageY],
-                [...Util.convertToRGB(color.value), 1],
-                canvas
+                canvasWrapper.canvasToClip(ev.pageX, ev.pageY),
+                [...Util.convertToRGB(color.value), 1]
               )
             );
           }
@@ -261,6 +260,7 @@ import * as saveload from "./modules/saveload.js";
       }
     });
 
+    // Canvas Operations (clear, save, load)
     const clear = document.getElementById("Clear");
     clear.addEventListener("click", () => {
       objects.length = 0;
@@ -271,6 +271,7 @@ import * as saveload from "./modules/saveload.js";
     save.addEventListener("click", () => {
       saveload.save(objects);
     });
+
     const load = document.getElementById("Load");
     load.addEventListener("change", () => {
       var fr = new FileReader();

@@ -38,7 +38,6 @@ function load(text) {
           break;
         case "poly":
           var tmp = new Polygon(v.center, v.color);
-          console.log(v.vertices);
           for (var i = 0; i < v.vertices.length; i += 2) {
             tmp.addPoints([v.vertices[i], v.vertices[i + 1]]);
           }
