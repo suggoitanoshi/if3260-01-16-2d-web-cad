@@ -1,0 +1,43 @@
+.window {
+  margin: 1vw 5vw;
+  display: grid;
+  grid:
+    "left right" 1fr
+    / auto 1fr;
+  gap: 8px;
+}
+
+#canvas {
+  outline: 1px solid black;
+}
+
+pre {
+  height: auto;
+  max-height: 200px;
+  overflow: auto;
+  background-color: #eeeeee;
+  word-break: normal;
+  word-wrap: normal;
+  white-space: pre;
+}
+
+.layout {
+  width: 1366px;
+  height: 768px;
+
+  display: grid;
+  grid:
+    "sidebar body" 1fr
+    / auto 1fr;
+  gap: 8px;
+}
+.left {
+  grid-area: left;
+}
+.right {
+  grid-area: right;
+}
+
+.form > * {
+  margin: 4px 2px;
+}

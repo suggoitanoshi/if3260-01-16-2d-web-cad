@@ -5,43 +5,47 @@
     <meta charset="utf-8" />
     <meta name="viewport" value="width=device-width; initial-scale=1" />
     <script src="renderer.js" type="module"></script>
-
+    <link rel="stylesheet" href="styles.css" />
     <style>
       body {
         margin: 0;
       }
-
-      canvas {
-        outline: 1px solid black;
-      }
     </style>
   </head>
   <body>
-    <canvas width="640" height="480" id="canvas">
-      Your browser doesn't support WebGL rendering. Consider switching browser
-      or device.
-    </canvas>
-    <form name="form">
-      <select name="shape">
-        <option value="Line">Line</option>
-        <option value="Rectangle">Rectangle</option>
-        <option value="Square">Square</option>
-        <option value="Polygon">Polygon</option>
-      </select>
-      <input name="color" type="color" />
-      <input type="button" value="create" class="create" />
-      <input type="button" value="move" class="move" />
-      <input type="button" value="resize" class="resize" />
-      <input type="button" value="recolor" class="recolor" />
-      <span>Current mode: <span class="mode">create</span></span>
-      <button id="Clear">Clear</button>
-      <br />
-      <button id="Save">Save</button>
-      <br />
-      Load File:
-      <input type="file" name="inputfile" id="Load" /> <br />
-      <pre id="output"></pre>
-    </form>
-    <a href="tutorial.html">Tutorial penggunaan</a>
+    <div class="window">
+      <div class="left">
+        <canvas width="640" height="480" id="canvas">
+          Your browser doesn't support WebGL rendering. Consider switching
+          browser or device.
+        </canvas>
+      </div>
+      <div class="right">
+        <form class="form" name="form">
+          <select name="shape">
+            <option value="Line">Line</option>
+            <option value="Rectangle">Rectangle</option>
+            <option value="Square">Square</option>
+            <option value="Polygon">Polygon</option>
+          </select>
+          <input name="color" type="color" />
+          <br />
+          <input type="button" value="create" class="create" />
+          <input type="button" value="move" class="move" />
+          <input type="button" value="resize" class="resize" />
+          <input type="button" value="recolor" class="recolor" />
+          <br />
+          <span>Current mode: <span class="mode">create</span></span>
+          <button id="Clear">Clear</button>
+          <br />
+          <button id="Save">Save</button>
+          <br />
+          Load File:
+          <input type="file" name="inputfile" id="Load" /> <br />
+          <pre id="output"></pre>
+        </form>
+        <a href="tutorial.html">Tutorial penggunaan</a>
+      </div>
+    </div>
   </body>
 </html>
