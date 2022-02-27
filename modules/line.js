@@ -38,6 +38,15 @@ class Line extends Object {
   render(gl, uniformColor) {
     super.render(gl, gl.LINE_STRIP, 2, uniformColor);
   }
+
+  pack() {
+    return {
+      type: "line",
+      start: this.#start,
+      end: this.#end,
+      color: this.getColor(),
+    };
+  }
 }
 
 export default Line;

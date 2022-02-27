@@ -7,6 +7,9 @@ class Rectangle extends Object {
   /** @type {number} */
   #height;
 
+  /** @type {[number. number]} */
+  #bottomLeft;
+
   /**
    * @param {number} width width of rect in clip space
    * @param {number} height height of rect in clip space
@@ -15,6 +18,10 @@ class Rectangle extends Object {
    */
   constructor(width, height, bottomLeft, color) {
     super(OBJECT_TYPES.RECT);
+
+    this.#width = width;
+    this.#height = height;
+    this.#bottomLeft = bottomLeft;
 
     this.setControls(bottomLeft, null);
 
@@ -53,6 +60,16 @@ class Rectangle extends Object {
    */
   render(gl, uniformColor) {
     super.render(gl, gl.TRIANGLE_FAN, 4, uniformColor);
+  }
+
+  pack() {
+    return {
+      type: "rect",
+      width: this.#width,
+      height: this.#height,
+      bottomLeft: this.#bottomLeft,
+      color: this.getColor(),
+    };
   }
 }
 

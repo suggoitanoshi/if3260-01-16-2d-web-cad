@@ -18,6 +18,11 @@ class Polygon extends Object {
   _count;
 
   /**
+   * Vertices
+   */
+  _vertex;
+
+  /**
    * Polygon finished status
    * @public
    * @type {boolean}
@@ -102,6 +107,15 @@ class Polygon extends Object {
       type = gl.LINES;
     }
     super.render(gl, type, this._count, uniformColor);
+  }
+
+  pack() {
+    return {
+      type: "poly",
+      center: this._center,
+      vertices: this.getVertices(),
+      color: this.getColor(),
+    };
   }
 }
 

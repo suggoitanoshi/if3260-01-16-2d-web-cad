@@ -8,9 +8,9 @@ export default class Square extends Object {
   _start;
 
   /**
-   * @type {HTMLCanvasElement}
+   * @type {number[]}
    */
-  _cnv;
+  _end;
 
   /**
    * @param {number[]} start real (x, y) HTML Elements in canvas, taken from pageX and pageY
@@ -21,8 +21,6 @@ export default class Square extends Object {
   constructor(start, end, color, canvas) {
     super(OBJECT_TYPES.SQUARE);
 
-    this._cnv = canvas;
-
     this._start = start;
 
     this.setColor(color);
@@ -32,7 +30,7 @@ export default class Square extends Object {
   /**
    * @param {number[]} end real (x, y) HTML Elements in canvas, taken from pageX and pageY
    */
-  setEnd(end) {
+  setEnd(end, canvas) {
     /**
      * @type {number}
      */
@@ -69,7 +67,7 @@ export default class Square extends Object {
         [this._start[0] + deltaX, this._start[1] + deltaY],
         [this._start[0], this._start[1] + deltaY],
       ]
-        .map(([x, y]) => Util.getCanvasCoordinate(x, y, this._cnv))
+        .map(([x, y]) => Util.getCanvasCoordinate(x, y, canvas))
         .flat()
     );
 
@@ -77,6 +75,15 @@ export default class Square extends Object {
       [this.points[0], this.points[1]],
       [this.points[4], this.points[5]]
     );
+  }
+
+  pack() {
+    return {
+      type: "square",
+      start: this._start,
+      vertices: this.getVertices(),
+      color: this.getColor(),
+    };
   }
 
   /**

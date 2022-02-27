@@ -1,6 +1,7 @@
 import CanvasWrapper from "./modules/canvas.js";
 import shapes from "./modules/shapes.js";
 import Util from "./modules/utils.js";
+import * as saveload from "./modules/saveload.js";
 
 (() => {
   document.addEventListener("DOMContentLoaded", async (_e) => {
@@ -56,7 +57,7 @@ import Util from "./modules/utils.js";
 
     const vColor = gl.getUniformLocation(program, "vColor");
 
-    const objects = [];
+    var objects = [];
 
     const render = () => {
       gl.clear(gl.COLOR_BUFFER_BIT);
@@ -114,7 +115,7 @@ import Util from "./modules/utils.js";
             } else {
               objects.push(
                 new shapes.Polygon(
-                  [ev.pageX, ev.pageY],
+                  canvasWrapper.canvasToClip(ev.pageX, ev.pageY),
                   [...Util.convertToRGB(color.value), 1],
                   canvas
                 )
@@ -200,7 +201,7 @@ import Util from "./modules/utils.js";
           }
 
           if (drawnObject instanceof shapes.Square) {
-            drawnObject.setEnd([ev.pageX, ev.pageY]);
+            drawnObject.setEnd([ev.pageX, ev.pageY], canvas);
           } else if (drawnObject instanceof shapes.Polygon) {
             if (mode === "create") {
               drawnObject.updatePoints([ev.pageX, ev.pageY], canvas);
@@ -263,6 +264,28 @@ import Util from "./modules/utils.js";
     clear.addEventListener("click", () => {
       objects.length = 0;
       render();
+    });
+
+    const save = document.getElementById("Save");
+    save.addEventListener("click", () => {
+      saveload.save(objects);
+    });
+    const load = document.getElementById("Load");
+    load.addEventListener("change", () => {
+      var fr = new FileReader();
+      const [file] = document.querySelector("input[type=file]").files;
+      fr.onload = () => {
+        document.getElementById("output").textContent = fr.result;
+        // Clear canvas
+        objects.length = 0;
+        // Load objects
+        console.log("test");
+        console.log(saveload.load(fr.result));
+        objects = objects.concat(saveload.load(fr.result));
+        render();
+      };
+      fr.readAsText(file);
+      console.log(objects);
     });
 
     render();
