@@ -21,6 +21,9 @@
         </canvas>
       </div>
       <div class="right">
+        <div class="tutorial_wrapper">
+          <a class="tutorial" href="tutorial.html">Tutorial penggunaan</a>
+        </div>
         <form class="form" name="form">
           <select name="shape">
             <option value="Line">Line</option>
@@ -29,22 +32,25 @@
             <option value="Polygon">Polygon</option>
           </select>
           <input name="color" type="color" />
-          <br />
-          <input type="button" value="create" class="create" />
-          <input type="button" value="move" class="move" />
-          <input type="button" value="resize" class="resize" />
-          <input type="button" value="recolor" class="recolor" />
-          <br />
-          <span>Current mode: <span class="mode">create</span></span> <br />
-          <button id="Clear">Clear canvas</button>
-          <br />
-          <button id="Save">Save</button>
-          <br />
-          Load File:
-          <input type="file" name="inputfile" id="Load" /> <br />
-          <pre id="output"></pre>
+          <div>
+            <input type="button" value="create" class="create" />
+            <input type="button" value="move" class="move" />
+            <input type="button" value="resize" class="resize" />
+            <input type="button" value="recolor" class="recolor" />
+          </div>
+          <div class="mode_label">
+            <span>Current mode: <span class="mode">create</span></span>
+          </div>
+          <div>
+            <button id="Clear">Clear canvas</button>
+            <button id="Save">Save</button>
+          </div>
+          <div class="load_label">
+            Load File:
+            <input type="file" name="inputfile" id="Load" />
+            <pre id="output"></pre>
+          </div>
         </form>
-        <a href="tutorial.html">Tutorial penggunaan</a>
       </div>
     </div>
   </body>
