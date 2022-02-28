@@ -133,3 +133,11 @@ input[type="color"] {
   border: none;
   border-radius: 5px;
 }
+
+input.undo {
+  background-color: var(--white);
+  color: var(--slategray);
+}
+input.undo:hover {
+  background-color: #fafafa;
+}

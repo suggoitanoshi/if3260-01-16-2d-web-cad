@@ -250,6 +250,14 @@ import * as saveload from "./modules/saveload.js";
         render();
       });
     });
+    const undo = document.getElementsByClassName("undo")[0];
+
+    undo.addEventListener("click", () => {
+      if (objects.length !== 0) {
+        objects.length = objects.length - 1;
+      }
+      render();
+    });
 
     canvas.addEventListener("dblclick", (ev) => {
       ev.preventDefault();
