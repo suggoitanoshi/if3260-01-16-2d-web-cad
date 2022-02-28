@@ -84,6 +84,7 @@ import * as saveload from "./modules/saveload.js";
     });
 
     canvas.addEventListener("mousedown", (ev) => {
+      console.log(ev);
       const drawnObject = objects[objects.length - 1];
       ev.preventDefault();
       ev.stopPropagation();
@@ -94,7 +95,8 @@ import * as saveload from "./modules/saveload.js";
             new shapes.Square(
               [ev.pageX, ev.pageY],
               [ev.pageX, ev.pageY],
-              [...Util.convertToRGB(color.value), 0.6]
+              [...Util.convertToRGB(color.value), 0.6],
+              canvas
             )
           );
         } else if (select.value === "Rectangle") {
@@ -200,7 +202,7 @@ import * as saveload from "./modules/saveload.js";
           }
 
           if (drawnObject instanceof shapes.Square) {
-            drawnObject.setEnd([ev.pageX, ev.pageY], canvas);
+            drawnObject.setEnd([ev.pageX, ev.pageY]);
           } else if (drawnObject instanceof shapes.Polygon) {
             if (mode === "create") {
               drawnObject.updatePoints([ev.pageX, ev.pageY], canvas);

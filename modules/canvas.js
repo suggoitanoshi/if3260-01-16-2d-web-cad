@@ -1,10 +1,6 @@
 import Util from "./utils.js";
 
 class CanvasWrapper {
-  /** @type {number} */
-  #width;
-  /** @type {number} */
-  #height;
   /** @type {HTMLCanvasElement} */
   #canvas;
   /** @type {WebGLRenderingContext} */
@@ -17,10 +13,10 @@ class CanvasWrapper {
     return this.#gl;
   }
   get width() {
-    return this.#width;
+    return this.#canvas.width;
   }
   get height() {
-    return this.#height;
+    return this.#canvas.height;
   }
   get program() {
     return this.#program;
@@ -38,8 +34,6 @@ class CanvasWrapper {
     if (!height) throw new Error("Must specify height!");
     if (!element) throw new Error("Must specify element!");
 
-    this.#width = width;
-    this.#height = height;
     this.#canvas = element;
     this.#canvas.width = width;
     this.#canvas.height = height;
@@ -53,7 +47,7 @@ class CanvasWrapper {
    */
   initializeGL(vertSource, fragSource) {
     const gl = (this.#gl = this.#canvas.getContext("webgl"));
-    gl.viewport(0, 0, this.#width, this.#height);
+    gl.viewport(0, 0, this.width, this.height);
     gl.clearColor(0, 0, 0, 0);
 
     const vertexShader = Util.createShader(gl, gl.VERTEX_SHADER, vertSource);
@@ -76,10 +70,10 @@ class CanvasWrapper {
    * Function to translate canvas space coordinate to clip space coordinate
    * @param {number} x x coordinate in canvas space
    * @param {number} y y coordinate in canvas space
-   * @returns {[number, number]} x,y in clip space
+   * @returns {[number, number]} x, y in clip space
    */
   canvasToClip(x, y) {
-    return [(2 * x) / this.#width - 1, 1 - (2 * y) / this.#height];
+    return Util.getCanvasCoordinate(x, y, this.#canvas);
   }
 }
 

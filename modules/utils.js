@@ -40,14 +40,14 @@ const Util = {
    * @param {number} x
    * @param {HTMLCanvasElement} canvas
    */
-  scaleWidth: (x, canvas) => (x * 2) / canvas.clientWidth,
+  scaleWidth: (x, canvas) => (x * 2) / canvas.width,
 
   /**
    *
    * @param {number} y
    * @param {HTMLCanvasElement} canvas
    */
-  scaleHeight: (y, canvas) => (y * 2) / canvas.clientHeight,
+  scaleHeight: (y, canvas) => (y * 2) / canvas.height,
 
   /**
    * @param {number} x
