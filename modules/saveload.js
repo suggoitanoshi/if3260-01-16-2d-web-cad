@@ -25,7 +25,7 @@ function save(objects) {
   document.body.removeChild(element);
 }
 
-function load(text) {
+function load(text, canvas) {
   const file = JSON.parse(text);
   var objects = [];
   try {
@@ -49,8 +49,7 @@ function load(text) {
           objects.push(tmp);
           break;
         case "square":
-          var tmp = new Square(v.start, v.end, v.color);
-          tmp.setPoints(v.vertices);
+          var tmp = new Square(v.start, v.end, v.color, canvas);
           objects.push(tmp);
           break;
         default:
@@ -58,7 +57,7 @@ function load(text) {
       }
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
   return objects;
 }

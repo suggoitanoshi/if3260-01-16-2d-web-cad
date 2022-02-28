@@ -47,6 +47,7 @@ export default class Square extends Object {
      */
     var deltaY;
 
+    this._end = end;
     const minimumSides = Math.min(
       Math.abs(this._start[0] - end[0]),
       Math.abs(this._start[1] - end[1])
@@ -65,8 +66,6 @@ export default class Square extends Object {
     } else {
       deltaY = deltaX = -minimumSides;
     }
-
-    console.log(this._cnv);
 
     this.setPoints(
       [
@@ -89,7 +88,7 @@ export default class Square extends Object {
     return {
       type: "square",
       start: this._start,
-      vertices: this.getVertices(),
+      end: this._end,
       color: this.getColor(),
     };
   }
