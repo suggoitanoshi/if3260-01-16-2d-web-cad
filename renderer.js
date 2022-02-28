@@ -84,7 +84,6 @@ import * as saveload from "./modules/saveload.js";
     });
 
     canvas.addEventListener("mousedown", (ev) => {
-      console.log(ev);
       const drawnObject = objects[objects.length - 1];
       ev.preventDefault();
       ev.stopPropagation();
@@ -281,14 +280,10 @@ import * as saveload from "./modules/saveload.js";
         document.getElementById("output").textContent = fr.result;
         // Clear canvas
         objects.length = 0;
-        // Load objects
-        console.log("test");
-        console.log(saveload.load(fr.result));
         objects = objects.concat(saveload.load(fr.result));
         render();
       };
       fr.readAsText(file);
-      console.log(objects);
     });
 
     render();

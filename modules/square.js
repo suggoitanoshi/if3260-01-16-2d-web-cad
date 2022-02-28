@@ -66,8 +66,6 @@ export default class Square extends Object {
       deltaY = deltaX = -minimumSides;
     }
 
-    console.log(this._cnv);
-
     this.setPoints(
       [
         this._start,
