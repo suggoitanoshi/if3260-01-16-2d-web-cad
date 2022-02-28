@@ -1,7 +1,6 @@
 import Util from "./utils.js";
 import Object, { OBJECT_TYPES } from "./object.js";
 
-// TODO: Fix bug 1st click always not working
 class Polygon extends Object {
   /**
    * Mouse coordinate on canvas
